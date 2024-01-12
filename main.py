@@ -84,7 +84,7 @@ def axisTitle(axisNum, title):
 
 # Main
 while True:
-    clearAll()
+    clearAll()  # Reset the window
     cities = generateLocations()
     perms = generateCombinations(cities)
 
@@ -92,11 +92,10 @@ while True:
     journeyCombinations = []
     journeyI = 1
     combos = len(perms)
-    iters = factorial(num)
 
     if num <= 2:
-        x = "Not enough locations"
-        raise ValueError(x)
+        err = "Not enough locations"
+        raise ValueError(err)
 
     while perms != []:
         journey = perms[0]
@@ -116,9 +115,9 @@ while True:
         for i in range(graphs):
             scatterXY(i, x, y)
         
-        total = 0
+        total = 0  # Total distance travelled for journey
         for j in range(len(cities)-1):
-            points = journey[j:j+2]
+            points = journey[j:j+2]  # Get steps in journey, from 1-2, 2-3, 3-4...
             x1, y1 = points[0]
             x2, y2 = points[1]
             d = distanceBetweenPoints([x1, x2], [y1, y2])
@@ -128,42 +127,42 @@ while True:
             points = journey[j:j+2]
             x1, y1 = points[0]
             x2, y2 = points[1]
-            plotLine(0, [x1, x2], [y1, y2], "b")
+            plotLine(0, [x1, x2], [y1, y2], "b")  # Plot each step of the journey as a line
 
         for i, txt in enumerate(range(1, len(cities))):
-            axisTitle(0, f"Working journey\n{percentage}% ({iters})\nDistance: {round(total, 1)}")
+            axisTitle(0, f"Working journey\n{percentage}% ({combos})\nDistance: {round(total, 1)}")
                 
-        if smallest_so_far is None or total < smallest_so_far:
+        if smallest_so_far is None or total < smallest_so_far:  # If journey distance is less than minimum record
             clearAxis(1)
             smallest_so_far = total
             for j in range(len(journey)-1):
                 points = journey[j:j+2]
                 x1, y1 = points[0]
                 x2, y2 = points[1]
-                plotLine(1, [x1, x2], [y1, y2], "g")
+                plotLine(1, [x1, x2], [y1, y2], "g")  # Plot each step of the journey as a line
 
             for i, txt in enumerate(range(1, len(cities))):
                 annotateAxis(1, str(txt), (journey[i][0], journey[i][1]), (journey[i][0], journey[i][1]+max([i[1] for i in cities])//20), "green")
                 axisTitle(1, f"Best journey\nIteration: {'{:,}'.format(journeyI-1)}\nMinimum distance: {round(smallest_so_far, 1)}")
 
-        if largest_so_far is None or total > largest_so_far:
+        if largest_so_far is None or total > largest_so_far:  # If journey distance is more than maximum record
             clearAxis(2)
             largest_so_far = total
             for j in range(len(journey)-1):
                 points = journey[j:j+2]
                 x1, y1 = points[0]
                 x2, y2 = points[1]
-                plotLine(2, [x1, x2], [y1, y2], "r")
+                plotLine(2, [x1, x2], [y1, y2], "r")  # Plot each step of the journey as a line
 
             for i, txt in enumerate(range(1, len(cities))):
                 annotateAxis(2, str(txt), (journey[i][0], journey[i][1]), (journey[i][0], journey[i][1]+max([i[1] for i in cities])//20), "red")
                 axisTitle(2, f"Worst journey\nIteration: {'{:,}'.format(journeyI-1)}\nMaximum distance: {round(largest_so_far, 1)}")
                     
-        plt.pause(.00001)
+        plt.pause(.00001)  # To enable live updating of graphs
 
     clearAxis(0)
     scatterXY(0, x, y)
-    axisTitle(0, "Locations")
+    axisTitle(0, "Locations")  # Replace graph 1 title to 'Locations' once work has done
 
     plt.show(block=False)
-    sleep(timeBetweenLoops)
+    sleep(timeBetweenLoops)  # Allow time for user to see result before new combinations
