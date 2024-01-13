@@ -1,4 +1,4 @@
-locations = 5  # Change me!
+locations = 6  # Change me!
 
 ######################################
 # CODE
@@ -97,9 +97,18 @@ while True:
         err = "Not enough locations"
         raise ValueError(err)
 
+    lastJourney = []
+    poppedYet = False
+
     while perms != []:
-        journey = perms[0]
-        perms.pop(0)
+        if not poppedYet:
+            journey = perms[0]
+            perms.pop(0)
+            poppedYet = True
+        else:
+            lastJourney = perms[0]
+            journey = perms[1]
+            perms.pop(0)
         journey = [cities[0]] + list(journey) + [cities[-1]]
         journey = list(journey)
 
